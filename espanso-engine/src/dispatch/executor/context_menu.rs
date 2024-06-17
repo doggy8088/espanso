@@ -39,7 +39,11 @@ impl<'a> ContextMenuExecutor<'a> {
 impl<'a> Executor for ContextMenuExecutor<'a> {
   fn execute(&self, event: &Event) -> bool {
     if let EventType::ShowContextMenu(context_menu_event) = &event.etype {
-      if let Err(error) = self.handler.show_context_menu(&context_menu_event.items) {
+      // Adding new menu items for "Edit base.yml" and "Open match folder"
+      let mut updated_items = context_menu_event.items.clone();
+      updated_items.push(MenuItem::Simple(SimpleMenuItem { id: 1, label: "Open match folder".to_string() }));
+
+      if let Err(error) = self.handler.show_context_menu(&updated_items) {
         error!("context menu handler reported an error: {:?}", error);
       }
 
